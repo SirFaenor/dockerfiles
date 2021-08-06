@@ -39,4 +39,7 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 RUN a2enmod rewrite
 RUN a2enmod headers
 
+RUN usermod -aG root appuser
 
+RUN chown -R "$APACHE_RUN_USER":"$APACHE_RUN_GROUP" ./
+RUN chmod -R 755 ./
