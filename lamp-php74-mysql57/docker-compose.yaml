@@ -55,3 +55,15 @@ services:
       UPLOAD_LIMIT : 200000000
     ports:
       - ${COMPOSE_PHPMYADMIN_PORT}
+  node:
+      image : node:12
+      command: >
+        sh -c "npm install &&
+              export NODE_ENV=${MIX_NODE_ENV} &&
+              npm run watch
+              "
+      volumes:
+        - "./:/app"
+      working_dir: /app
+      ports:
+        - ${MIX_BROWSERSYNC_PORT}:${MIX_BROWSERSYNC_PORT}
