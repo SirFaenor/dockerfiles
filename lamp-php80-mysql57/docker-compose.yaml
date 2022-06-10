@@ -7,8 +7,11 @@ version: "3"
 services:
   web:
     build:
-      dockerfile: docker-php.dockerfile
       context: .
+      dockerfile: docker-php.dockerfile
+      args:
+        - APACHE_RUN_USER=${COMPOSE_APACHE_RUN_USER}
+        - APACHE_RUN_GROUP=${COMPOSE_APACHE_RUN_GROUP}
     restart: "no"
     volumes:
       - ".:/var/www/html"
@@ -16,17 +19,11 @@ services:
       - "./docker-data/php/php.ini:/usr/local/etc/php/conf.d/custom.ini"
     ports:
       - ${COMPOSE_WEB_PORT}
-    environment:
-      # lasciare "#"
-      - APACHE_RUN_USER=#${MY_USER_ID}
-      - APACHE_RUN_GROUP=#${MY_USER_ID}
-      # passo id utente per creare un nuovo utente nel container
-      - MY_USER_ID=${MY_USER_ID}
 
       # imposta l'hostname (come ritornato da gethostname()) INTERNAMENTE AL CONTAINER. Non ha effetto all'esterno
     hostname: ${COMPOSE_PROJECT_NAME}.localhost
     # utente default di esecuzione dei comandi nel container, utilizza utente del sistema host (es. bash)
-    user : ${MY_USER_ID}
+    user : ${COMPOSE_APACHE_RUN_USER}
   db:
     image: mysql:5.7
     restart: "no"

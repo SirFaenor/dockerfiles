@@ -1,11 +1,11 @@
 FROM php:8.0-apache
 
-ENV INTERNAL_USER_ID=1000
-ENV INTERNAL_USER_GROUP=root
+ARG APACHE_RUN_USER
+ARG APACHE_RUN_GROUP
 
 # crea utente con la shell di default
 #RUN useradd -rm --home-dir /home/appuser --shell /bin/bash --gid $INTERNAL_USER_GROUP --uid $INTERNAL_USER_ID
-RUN useradd --uid $INTERNAL_USER_ID --gid $INTERNAL_USER_GROUP --shell /bin/bash --create-home appuser
+RUN useradd --uid $APACHE_RUN_USER --gid $APACHE_RUN_GROUP --shell /bin/bash --create-home appuser
 
 RUN apt-get update && \
     apt-get install -y -qq git \
@@ -29,14 +29,7 @@ RUN apt-get update && \
 RUN pecl install redis && docker-php-ext-enable redis
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install -j$(nproc) gd
-RUN docker-php-ext-install iconv
-#RUN docker-php-ext-install json
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install pdo
-RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install bcmath curl
+RUN docker-php-ext-install -j$(nproc) gd iconv mbstring zip pdo pdo_mysql bcmath curl
 
 RUN apt-get install -y libmagickwand-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
 RUN printf "\n" | pecl install imagick
