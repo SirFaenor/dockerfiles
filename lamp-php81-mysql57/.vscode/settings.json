@@ -6,5 +6,6 @@
                 "cmd": "./docker-fw /var/www/html/tools/php-cs-fixer/vendor/friendsofphp/php-cs-fixer/php-cs-fixer --using-cache=no --format=json fix ${relativeFile}"
             }
         ]
-    }
+    },
+    "php.validate.executablePath": "./docker-php-validate",
 }
