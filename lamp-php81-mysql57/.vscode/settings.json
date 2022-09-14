@@ -6,10 +6,10 @@
                 "cmd": "./docker-fw /var/www/html/tools/php-cs-fixer/vendor/friendsofphp/php-cs-fixer/php-cs-fixer --using-cache=no --format=json fix ${relativeFile}"
             },
             {
-              "match": ".php",
-					    "cmd": "./docker-fw /var/www/html/vendor/bin/phpstan analyse ${relativeFile}"
-				    }
+                "match": ".php",
+                "cmd": "./docker-fw /var/www/html/vendor/bin/phpstan analyse ${relativeFile}"
+            }
         ]
     },
-    "php.validate.executablePath": "./docker-php-validate",
+    "php.validate.executablePath": "./docker-php-validate"
 }
