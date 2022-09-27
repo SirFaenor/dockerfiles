@@ -16,7 +16,7 @@ services:
     volumes:
       - ".:/var/www/html"
       - "./docker-data/log:/var/log/apache2"
-      - "./docker-data/php/php.ini:/usr/local/etc/php/conf.d/custom.ini"
+      - "./docker-data/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini"
     ports:
       - ${COMPOSE_WEB_PORT}
 
@@ -61,3 +61,10 @@ services:
     working_dir: /app
     ports:
       - ${MIX_BROWSERSYNC_PORT}:${MIX_BROWSERSYNC_PORT}
+  smtp:
+    image: mailhog/mailhog
+    logging:
+      driver: 'none'
+    ports:
+      - ${COMPOSE_MAILHOG_PORT_1}
+      - ${COMPOSE_MAILHOG_PORT_2}

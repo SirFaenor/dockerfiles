@@ -1,3 +1,12 @@
-# call a docker-fw script in current directory to forward php commands
-# usage dphp artisan route:clear
-alias dphp="./docker-fw php"
+
+# connect to a bash inside a named container ("$1")
+dockerbash() {
+    docker exec -it "$1" /bin/bash
+}
+
+# call a docker-php script in current directory to forward php commands
+# e.g. "dphp artisan route:list"
+function dphp()
+{
+    ./docker-php $@
+}

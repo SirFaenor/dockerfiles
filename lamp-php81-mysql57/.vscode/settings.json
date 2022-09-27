@@ -1,15 +1,26 @@
 {
-  "emeraldwalk.runonsave": {
+    // phpstan.* settings for sanderronde.phpstan-vscode to run phpstan inside a docker container
+    // (using the correct php versions)
+    "phpstan.binCommand": [
+        "docker", "exec", "{$containerName}", "vendor/bin/phpstan"
+    ],
+    "phpstan.configFile": ".phpstan.neon",
+    "phpstan.enableLanguageServer": false,
+    "phpstan.binPath": "",
+    "phpstan.paths": {
+        "{$absolutePathToProject}": "/var/www/html"
+    },
+    "phpstan.timeout": 100000,
+
+    // run php-cs-fixer inside a docker container through the extension emeraldwalk.runonsave
+    "emeraldwalk.runonsave": {
         "commands": [
             {
                 "match": ".php",
-                "cmd": "./docker-fw /var/www/html/tools/php-cs-fixer/vendor/friendsofphp/php-cs-fixer/php-cs-fixer --using-cache=no --format=json fix ${relativeFile}"
-            },
-            {
-                "match": ".php",
-                "cmd": "./docker-fw /var/www/html/vendor/bin/phpstan analyse ${relativeFile}"
+                "isAsync": true,
+                "cmd": "docker exec -i {$containerName} /var/www/html/tools/php-cs-fixer/vendor/bin/php-cs-fixer fix /var/www/html/${relativeFile}"
             }
         ]
-    },
-    "php.validate.executablePath": "./docker-php-validate"
+    }
+
 }

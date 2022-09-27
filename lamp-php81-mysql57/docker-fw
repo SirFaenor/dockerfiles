@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# forward command from project dir to named container
-docker exec -t project_name_web_1 $@ 
