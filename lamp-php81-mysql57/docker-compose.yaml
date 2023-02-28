@@ -6,6 +6,7 @@ version: "3"
 
 services:
   web:
+    container_name: ${COMPOSE_PROJECT_NAME}_web
     build:
       context: .
       dockerfile: docker-php.dockerfile
@@ -19,12 +20,17 @@ services:
       - "./docker-data/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini"
     ports:
       - ${COMPOSE_WEB_PORT}
-
       # imposta l'hostname (come ritornato da gethostname()) INTERNAMENTE AL CONTAINER. Non ha effetto all'esterno
     hostname: ${COMPOSE_PROJECT_NAME}.localhost
     # utente default di esecuzione dei comandi nel container, utilizza utente del sistema host (es. bash)
-    user : ${COMPOSE_APACHE_RUN_USER}
+    user: ${COMPOSE_APACHE_RUN_USER}
+    environment:
+      - VIRTUAL_HOST=${COMPOSE_VIRTUAL_HOST}
+    networks:
+      - default
+      - _external_
   db:
+    container_name: ${COMPOSE_PROJECT_NAME}_db
     image: mysql:5.7
     restart: "no"
     environment:
@@ -43,6 +49,7 @@ services:
       - "./:/app"
   # raggiungibile su {hostname}:5000
   phpmyadmin:
+    container_name: ${COMPOSE_PROJECT_NAME}_pma
     image: phpmyadmin/phpmyadmin:5
     restart: "no"
     environment:
@@ -61,10 +68,14 @@ services:
     working_dir: /app
     ports:
       - ${MIX_BROWSERSYNC_PORT}:${MIX_BROWSERSYNC_PORT}
-  smtp:
+  mailhog:
     image: mailhog/mailhog
     logging:
       driver: 'none'
     ports:
       - ${COMPOSE_MAILHOG_PORT_1}
       - ${COMPOSE_MAILHOG_PORT_2}
+networks:
+  _external_:
+    external:
+        name: ${COMPOSE_EXTERNAL_NETWORK}
