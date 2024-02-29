@@ -1,4 +1,5 @@
 
+
 # connect to a bash inside a named container ("$1")
 dockerbash() {
     docker exec -it "$1" /bin/bash
@@ -23,4 +24,14 @@ function dcomposer()
 # forward any command to a docker-compose container called "web" in the current directory
 function d() {
     docker compose exec -it web $@
+}
+
+# forward any artisan command to a docker-compose container called "web" in the current directory
+function dartisan() {
+    docker compose exec -it web php artisan $@
+}
+
+# forward any command to a docker-compose container called "node" in the current directory (.eg. dnode npm install)
+function dnode() {
+    docker compose exec -it node $@
 }
